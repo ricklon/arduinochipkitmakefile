@@ -10,7 +10,7 @@ UPLOAD_SPEED 	?= 57600
 
 #Arduino info
 
-ARD_SRC_HOME	?= /home/ricklon/projects/Arduino
+ARD_SRC_HOME	?= ./sketches 
 ARD_HOME	?= $(ARD_SRC_HOME)/build/linux/work
 SKT_DIR		?= $(ARD_SRC_HOME)/testing/tests
 

@@ -52,11 +52,12 @@
 #
 
 # Global configuration.
-ARD_REV ?= 0018
-ARD_HOME ?= /opt/arduino
+ARD_REV ?= 0100
+ARD_HOME ?= ./ 
 MON_TERM ?= gnome-terminal
 MON_SPEED ?= 9600
 MON_CMD ?= tip
+PLATFORM = pic32
 
 ### Nothing below here should require editing. ###
 
@@ -70,22 +71,17 @@ ifndef PORT
 endif
 
 # Version-specific settings
-ifeq ($(ARD_REV),0018)
-    ARD_BOARDS	=	$(ARD_HOME)/hardware/arduino/boards.txt
-    ARD_SRC_DIR	=	$(ARD_HOME)/hardware/arduino/cores/arduino
+    ARD_BOARDS	=	$(ARD_HOME)/hardware/$(PLATFORM)/boards.txt
+    ARD_PLATFORMS =     $(ARD_HOME)/hardware/$(PLATFORM)/platforms.txt
+    ARD_COMPILER =  	$(ARD_HOME)/hardware/compiler
+    ARD_SRC_DIR	=	$(ARD_HOME)/hardware/$(PLATFORM)/cores/$(PLATFORM)
     ARD_MAIN	=	$(ARD_SRC_DIR)/main.cpp
-else
-    ARD_BOARDS	=	$(ARD_HOME)/hardware/boards.txt
-    ARD_SRC_DIR	=	$(ARD_HOME)/hardware/cores/arduino
-    ARD_MAIN	=	$(ARD_SRC_DIR)/main.cxx
-endif
+    ARD_BIN     =	$(ARD_COMPILER)/bin
 
 # Standard macros.
 PROGRAMMER ?= stk500v1
 SKETCH	=	$(notdir $(CURDIR))
 
-#ARD_BIN	=	$(ARD_HOME)/hardware/tools/gcc-avr/bin
-ARD_BIN	?=	$(ARD_HOME)/hardware/tools/avr/bin
 MCU := \
     $(shell sed -n 's/$(BOARD)\.build\.mcu=\(.*\)/\1/p' < $(ARD_BOARDS))
 F_CPU := \
@@ -101,13 +97,13 @@ BUILD_DIR	=	$(OUTPUT_DIR)/build
 # Build tools.
 # if Windows append .exe to all
 
-CC			=	$(ARD_BIN)/avr-gcc
-CXX			=	$(ARD_BIN)/avr-g++
-OBJCOPY			=	$(ARD_BIN)/avr-objcopy
-OBJDUMP			=	$(ARD_BIN)/avr-objdump
-AR			=	$(ARD_BIN)/avr-ar
-SIZE			=	$(ARD_BIN)/avr-size
-NM			=	$(ARD_BIN)/avr-nm
+CC			=	$(ARD_BIN)/$(PLATFORM)-gcc
+CXX			=	$(ARD_BIN)/$(PLATFORM)-g++
+OBJCOPY			=	$(ARD_BIN)/$(PLATFORM)-objcopy
+OBJDUMP			=	$(ARD_BIN)/$(PLATFORM)-objdump
+AR			=	$(ARD_BIN)/$(PLATFORM)-ar
+SIZE			=	$(ARD_BIN)/$(PLATFORM)-size
+NM			=	$(ARD_BIN)/$(PLATFORM)-nm
 AVRDUDE_BIN		?=	/usr/bin	
 AVRDUDE			=	$(AVRDUDE_BIN)/avrdude
 AVRDUDE_CONF		?=	/etc/avrdude.conf
