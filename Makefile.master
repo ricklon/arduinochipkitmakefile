@@ -53,12 +53,12 @@
 
 # Global configuration.
 ARD_REV ?= 0100
-ARD_HOME ?= ./ 
+ARD_HOME ?= /home/ricklon/projects/arduinochipkitmakefile
 MON_TERM ?= gnome-terminal
 MON_SPEED ?= 9600
 MON_CMD ?= tip
 PLATFORM = pic32
-
+BOARD = fubarino_sd_seeed
 ### Nothing below here should require editing. ###
 
 # Check for the required definitions.
@@ -73,15 +73,17 @@ endif
 # Version-specific settings
     ARD_BOARDS	=	$(ARD_HOME)/hardware/$(PLATFORM)/boards.txt
     ARD_PLATFORMS =     $(ARD_HOME)/hardware/$(PLATFORM)/platforms.txt
-    ARD_COMPILER =  	$(ARD_HOME)/hardware/compiler
+    ARD_COMPILER =  	$(ARD_HOME)/hardware/$(PLATFORM)/compiler/pic32-tools
     ARD_SRC_DIR	=	$(ARD_HOME)/hardware/$(PLATFORM)/cores/$(PLATFORM)
     ARD_MAIN	=	$(ARD_SRC_DIR)/main.cpp
     ARD_BIN     =	$(ARD_COMPILER)/bin
 
+
+
 # Standard macros.
 PROGRAMMER ?= stk500v1
-SKETCH	=	$(notdir $(CURDIR))
-
+#SKETCH	=	$(notdir $(CURDIR))
+SKETCH ?= $(ARD_HOME)/sketches/Blink
 MCU := \
     $(shell sed -n 's/$(BOARD)\.build\.mcu=\(.*\)/\1/p' < $(ARD_BOARDS))
 F_CPU := \
@@ -91,7 +93,7 @@ UPLOAD_SPEED ?= \
 PROGRAMMER ?= \
     $(shell sed -n 's/$(BOARD)\.upload\.protocol=\(.*\)/\1/p' < $(ARD_BOARDS))
 
-BUILD_DIR	=	$(OUTPUT_DIR)/build
+BUILD_DIR	=	$(OUTPUT_DIR)
 
 
 # Build tools.
@@ -200,6 +202,9 @@ endef
 .PHONY : all clean upload monitor upload_monitor
 
 all : $(BUILD_DIR) $(IMAGE).hex
+
+print-%:
+	@echo '$*=$($*)'
 
 clean :
 	$(RM) $(OUTPUT_DIR)

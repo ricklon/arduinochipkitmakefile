@@ -4,24 +4,25 @@
 
 
 #Board info
-BOARD		?= atmega328
+BOARD 		= fubarino_sd_seeed
 PORT		?= /dev/ttyUSB0
 UPLOAD_SPEED 	?= 57600
 
 #Arduino info
+ARD_HOME = /home/ricklon/projects/arduinochipkitmakefile
 
-ARD_SRC_HOME	?= ./sketches 
-ARD_HOME	?= $(ARD_SRC_HOME)/build/linux/work
-SKT_DIR		?= $(ARD_SRC_HOME)/testing/tests
+#ARD_SRC_HOME	?= ./sketches 
+#ARD_HOME	?= $(ARD_SRC_HOME)/build/linux/work
+SKT_DIR		?= $(ARD_HOME)/sketches
+OUTPUT_DIR	?= $(ARD_HOME)/build
+SKETCH          ?= $(ARD_HOME)/sketches/Blink
+
 
 #Toolchain info
 AVRDUDE_BIN	?= /usr/bin
 ARD_BIN		?= /usr/bin
 AVRDUDE_CONF	?=/etc/avrdude.conf
 PROGRAMMER = stk500v1
-LIB_DIRS =  $(wildcard $(ARD_HOME)/libraries/*) $(wildcard $(ARD_HOME)/libraries/*/utility) 
-
-OUTPUT_DIR ?= OUT
-
+LIB_DIRS =  $(wildcard $(ARD_HOME)/$(PLATFORM)/libraries/*) $(wildcard $(ARD_HOME)/$(PLATFORM)/libraries/*/utility) 
 
 include Makefile.master
