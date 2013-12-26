@@ -117,6 +117,34 @@ MV				=	mv -f
 ifeq ($(TARGET_OS), windows)
  $(addusuffix .exe,$(CC) $(CXX) $(OBJCOPY) $(OBJDUMP) $(AR) $(SIZE) $(NM) $(AVRDUDE) $(RESET))
 endif
+##  get Compile patterns from the platforms.txt file
+
+C_OBJ_PATTERN 	=  $(shell sed -n 's/$(PLATFORMS)\.c\.o\.pattern=\(.*\)/\1/p' < $(AAA))
+CPP_OBJ_PATTER 	=
+AR_PATTERN	=
+CCOMBO_PATTERN	=
+EEP_PATTERN	=
+HEX_PATTERN	=
+
+
+# getCompiler flags from platforms.txt
+#These are the platform defaults
+C_FLAGS		=
+CPP_FLAGS	=
+S_FLAGS		=
+AR_FLAGS	=
+EEP_FLAGS	=
+ELF2HEX_FLAGS	=
+LD_FLAGS 	=
+UPLOAD_FLAGS 	=
+
+
+# if compiler flags are changed get from boards.txt
+# double check values for variable subsititions
+
+
+
+
 
 # Compiler flags.
 ARD_FLAGS		=	-mmcu=$(MCU) -DF_CPU=$(F_CPU) -DARDUINO=$(ARD_REV)
