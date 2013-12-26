@@ -119,7 +119,7 @@ ifeq ($(TARGET_OS), windows)
 endif
 ##  get Compile patterns from the platforms.txt file
 
-C_OBJ_PATTERN 	=  $(shell sed -n 's/$(PLATFORMS)\.c\.o\.pattern=\(.*\)/\1/p' < $(AAA))
+C_OBJ_PATTERN 	:=  $(shell sed -n 's/$(PLATFORM)\.recipe\.c\.o\.pattern=\(.*\)/\1/p' < $(ARD_PLATFORMS))
 CPP_OBJ_PATTER 	=
 AR_PATTERN	=
 CCOMBO_PATTERN	=
