@@ -120,23 +120,28 @@ endif
 ##  get Compile patterns from the platforms.txt file
 
 C_OBJ_PATTERN 	:=  $(shell sed -n 's/$(PLATFORM)\.recipe\.c\.o\.pattern=\(.*\)/\1/p' < $(ARD_PLATFORMS))
-CPP_OBJ_PATTER 	=
-AR_PATTERN	=
-CCOMBO_PATTERN	=
-EEP_PATTERN	=
-HEX_PATTERN	=
+CPP_OBJ_PATTER 	= $(shell sed -n 's/$(PLATFORM)\.recipe\.cpp\.o\.pattern=\(.*\)/\1/p' < $(ARD_PLATFORMS))
+AR_PATTERN	= $(shell sed -n 's/$(PLATFORM)\.recipe\.ar\.pattern=\(.*\)/\1/p' < $(ARD_PLATFORMS))
+CCOMBO_PATTERN	= $(shell sed -n 's/$(PLATFORM)\.recipe\.c\.combine\.pattern=\(.*\)/\1/p' < $(ARD_PLATFORMS))
+EEP_PATTERN	= $(shell sed -n 's/$(PLATFORM)\.recipe\.objcopy\.eep\.pattern=\(.*\)/\1/p' < $(ARD_PLATFORMS))
+HEX_PATTERN	= $(shell sed -n 's/$(PLATFORM)\.recipe\.objcopy\.hex\.pattern=\(.*\)/\1/p' < $(ARD_PLATFORMS))
+
 
 
 # getCompiler flags from platforms.txt
 #These are the platform defaults
-C_FLAGS		=
-CPP_FLAGS	=
-S_FLAGS		=
-AR_FLAGS	=
-EEP_FLAGS	=
-ELF2HEX_FLAGS	=
-LD_FLAGS 	=
-UPLOAD_FLAGS 	=
+##
+## Double check ldflags, and C_ELF_FLAGS
+##
+C_FLAGS		= $(shell sed -n 's/$(PLATFORM)\.compiler\.c\.flags=\(.*\)/\1/p' < $(ARD_PLATFORMS))
+CPP_FLAGS	= $(shell sed -n 's/$(PLATFORM)\.compiler\.cpp\.flags=\(.*\)/\1/p' < $(ARD_PLATFORMS))
+S_FLAGS		= $(shell sed -n 's/$(PLATFORM)\.compiler\.S\.flags=\(.*\)/\1/p' < $(ARD_PLATFORMS))
+AR_FLAGS	= $(shell sed -n 's/$(PLATFORM)\.compiler\.ar\.flags=\(.*\)/\1/p' < $(ARD_PLATFORMS))
+EEP_FLAGS	= $(shell sed -n 's/$(PLATFORM)\.compiler\.objcopy\.eep\.flags=\(.*\)/\1/p' < $(ARD_PLATFORMS))
+C_ELF_FLAGS 	= $(shell sed -n 's/$(PLATFORM)\.compiler\.c\.elf\.flags=\(.*\)/\1/p' < $(ARD_PLATFORMS))
+ELF2HEX_FLAGS	= $(shell sed -n 's/$(PLATFORM)\.compiler\.elf2hex\.flags=\(.*\)/\1/p' < $(ARD_PLATFORMS))
+LD_FLAGS 	= $(shell sed -n 's/$(PLATFORM)\.compiler\.ldflags=\(.*\)/\1/p' < $(ARD_PLATFORMS))
+UPLOAD_FLAGS 	= $(shell sed -n 's/$(PLATFORM)\.compiler\.upload\.flags=\(.*\)/\1/p' < $(ARD_PLATFORMS))
 
 
 # if compiler flags are changed get from boards.txt
