@@ -1,4 +1,4 @@
-#
+#!/bin/bash
 # Get the chipKIT core files and store in the hardware folder.
 #
 mkdir hardware
