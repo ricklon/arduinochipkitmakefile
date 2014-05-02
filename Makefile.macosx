@@ -9,11 +9,14 @@ PORT		?= /dev/tty.usbserial-A7004qgI
 UPLOAD_SPEED 	?= 57600
 
 #Arduino info
+
+ARD_HOME	?=  $(shell pwd)
+
 #/home/ricklon/projects/Arduino/testing/tests
-TARGET_OS	?= macosx
-ARD_SRC_HOME	?= /Users/rianders/projects/Arduino
-ARD_HOME	?= $(ARD_SRC_HOME)/build/$(TARGET_OS)/work/Arduino.app/Contents/Resources/Java
-SKT_DIR		?= $(ARD_SRC_HOME)/testing/tests
+TARGET_OS	?= $(ARD_HOME)macosx
+OUTPUT_DIR 	?= $(ARD_HOME)/build
+SKT_DIR		?= $(ARD_HOME)/sketches
+SKETCH          ?= $(SKT_DIR)/Blink
 
 #Toolchain info
 AVRDUDE_BIN	?= $(ARD_HOME)/hardware/tools/avr/bin
@@ -22,7 +25,6 @@ AVRDUDE_CONF	?= $(ARD_HOME)/hardware/tools/avr/etc/avrdude.conf
 PROGRAMMER = stk500v1
 LIB_DIRS =  $(wildcard $(ARD_HOME)/libraries/*) $(wildcard $(ARD_HOME)/libraries/*/utility) 
 
-OUTPUT_DIR ?= OUT
 
 
 include Makefile.master

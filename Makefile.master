@@ -152,7 +152,7 @@ UPLOAD_FLAGS 	= $(shell sed -n 's/$(PLATFORM)\.compiler\.upload\.flags=\(.*\)/\1
 
 
 # Compiler flags.
-ARD_FLAGS		=	-mmcu=$(MCU) -DF_CPU=$(F_CPU) -DARDUINO=$(ARD_REV)
+ARD_FLAGS		=	-mprocessor=$(MCU) -DF_CPU=$(F_CPU) -DARDUINO=$(ARD_REV)
 #C_FLAGS		=	-std=gnu99 -Wall -Wextra -Wundef -Wstrict-prototypes -Werror -Wno-old-style-declaration -Wno-unused-parameter -fdiagnostics-show-option
 C_FLAGS			=	-std=gnu99 -Wall -Wextra -Wundef -Wstrict-prototypes -Wno-old-style-declaration -Wno-unused-parameter -fdiagnostics-show-option
 #CXX_FLAGS		=	-Wall -Wextra -Wundef -Werror -Wno-unused-parameter -fdiagnostics-show-option
@@ -167,10 +167,10 @@ CXX_FLAGS		=	-Wall -Wextra -Wundef -Wno-unused-parameter -fdiagnostics-show-opti
 # http://www.tty1.net/blog/2008-04-29-avr-gcc-optimisations_en.html
 # NB would like to add -fno-split-wide-types but that makes upload verify fail
 OPT_FLAGS	=	\
-    -Os -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums \
-    -ffunction-sections -fdata-sections -Wl,--gc-sections,--relax \
-    -fno-inline-small-functions -fno-tree-scev-cprop -fno-exceptions \
-    -ffreestanding -mcall-prologues
+   # -Os -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums \
+   # -ffunction-sections -fdata-sections -Wl,--gc-sections,--relax \
+   # -fno-inline-small-functions -fno-tree-scev-cprop -fno-exceptions \
+   # -ffreestanding -mcall-prologues
 
 # Arduino environment.
 ARD_C_SRC	=	$(wildcard $(ARD_SRC_DIR)/*.c)
