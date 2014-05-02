@@ -8,8 +8,8 @@ BOARD 		?= fubarino_sd_seeed
 PORT		?= /dev/ttyUSB0
 UPLOAD_SPEED 	?= 57600
 
-#Arduino info
-ARD_HOME 	?= /home/ricklon/projects/arduinochipkitmakefile
+#Arduino info ## Really makefile home
+ARD_HOME 	?=   $(shell pwd)
 
 #ARD_SRC_HOME	?= ./sketches 
 #ARD_HOME	?= $(ARD_SRC_HOME)/build/linux/work

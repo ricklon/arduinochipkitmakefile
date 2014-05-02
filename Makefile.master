@@ -53,12 +53,12 @@
 
 # Global configuration.
 ARD_REV ?= 0100
-ARD_HOME ?= /home/ricklon/projects/arduinochipkitmakefile
+ARD_HOME ?=   $(shell pwd)
 MON_TERM ?= gnome-terminal
 MON_SPEED ?= 9600
 MON_CMD ?= tip
-PLATFORM = pic32
-BOARD = fubarino_sd_seeed
+PLATFORM ?= pic32
+BOARD ?= fubarino_sd_seeed
 ### Nothing below here should require editing. ###
 
 # Check for the required definitions.
@@ -144,7 +144,7 @@ ELF2HEX_FLAGS	= $(shell sed -n 's/$(PLATFORM)\.compiler\.elf2hex\.flags=\(.*\)/\
 LD_FLAGS 	= $(shell sed -n 's/$(PLATFORM)\.compiler\.ldflags=\(.*\)/\1/p' < $(ARD_PLATFORMS))
 UPLOAD_FLAGS 	= $(shell sed -n 's/$(PLATFORM)\.compiler\.upload\.flags=\(.*\)/\1/p' < $(ARD_PLATFORMS))
 #custom flags 
-OPT_FLAGS 	= ""
+OPT_FLAGS 	= 
 
 # if compiler flags are changed get from boards.txt
 # double check values for variable subsititions
