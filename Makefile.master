@@ -79,7 +79,6 @@ endif
     ARD_BIN     =	$(ARD_COMPILER)/bin
 
 
-
 # Standard macros.
 PROGRAMMER ?= stk500v1
 #SKETCH	=	$(notdir $(CURDIR))
@@ -127,6 +126,8 @@ EEP_PATTERN	= $(shell sed -n 's/$(PLATFORM)\.recipe\.objcopy\.eep\.pattern=\(.*\
 HEX_PATTERN	= $(shell sed -n 's/$(PLATFORM)\.recipe\.objcopy\.hex\.pattern=\(.*\)/\1/p' < $(ARD_PLATFORMS))
 
 
+VARIANT		= $(shell sed -n 's/$(PLATFORM)\.build\.variant=\(.*\)/\1/p' < $(ARD_PLATFORMS))
+VARIANT_PATH 	= $(ARD_HOME)/hardware/$(PLATFORM)/variants/$(VARIANT)
 
 # getCompiler flags from platforms.txt
 #These are the platform defaults
@@ -142,7 +143,8 @@ C_ELF_FLAGS 	= $(shell sed -n 's/$(PLATFORM)\.compiler\.c\.elf\.flags=\(.*\)/\1/
 ELF2HEX_FLAGS	= $(shell sed -n 's/$(PLATFORM)\.compiler\.elf2hex\.flags=\(.*\)/\1/p' < $(ARD_PLATFORMS))
 LD_FLAGS 	= $(shell sed -n 's/$(PLATFORM)\.compiler\.ldflags=\(.*\)/\1/p' < $(ARD_PLATFORMS))
 UPLOAD_FLAGS 	= $(shell sed -n 's/$(PLATFORM)\.compiler\.upload\.flags=\(.*\)/\1/p' < $(ARD_PLATFORMS))
-
+#custom flags 
+OPT_FLAGS 	= ""
 
 # if compiler flags are changed get from boards.txt
 # double check values for variable subsititions
@@ -150,27 +152,6 @@ UPLOAD_FLAGS 	= $(shell sed -n 's/$(PLATFORM)\.compiler\.upload\.flags=\(.*\)/\1
 
 
 
-
-# Compiler flags.
-ARD_FLAGS		=	-mprocessor=$(MCU) -DF_CPU=$(F_CPU) -DARDUINO=$(ARD_REV)
-#C_FLAGS		=	-std=gnu99 -Wall -Wextra -Wundef -Wstrict-prototypes -Werror -Wno-old-style-declaration -Wno-unused-parameter -fdiagnostics-show-option
-C_FLAGS			=	-std=gnu99 -Wall -Wextra -Wundef -Wstrict-prototypes -Wno-old-style-declaration -Wno-unused-parameter -fdiagnostics-show-option
-#CXX_FLAGS		=	-Wall -Wextra -Wundef -Werror -Wno-unused-parameter -fdiagnostics-show-option
-CXX_FLAGS		=	-Wall -Wextra -Wundef -Wno-unused-parameter -fdiagnostics-show-option 
-
-# Optimiser flags.
-#     optimise for size, unsigned by default, pack data.
-#     separate sections, drop unused ones, shorten branches, jumps.
-#     don''t inline, vectorise loops. no exceptions.
-#     no os preamble, use function calls in prologues.
-# http://gcc.gnu.org/onlinedocs/gcc-2.95.3/gcc.html
-# http://www.tty1.net/blog/2008-04-29-avr-gcc-optimisations_en.html
-# NB would like to add -fno-split-wide-types but that makes upload verify fail
-OPT_FLAGS	=	\
-   # -Os -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums \
-   # -ffunction-sections -fdata-sections -Wl,--gc-sections,--relax \
-   # -fno-inline-small-functions -fno-tree-scev-cprop -fno-exceptions \
-   # -ffreestanding -mcall-prologues
 
 # Arduino environment.
 ARD_C_SRC	=	$(wildcard $(ARD_SRC_DIR)/*.c)
@@ -183,7 +164,7 @@ ARD_AR_OBJ	=	$(ARD_AR)($(ARD_C_OBJ) $(ARD_CXX_OBJ))
 ARD_LD_FLAG	=	-l$(ARD_LIB)
 
 # Workaround for http://gcc.gnu.org/bugzilla/show_bug.cgi?id=34734
-$(ARD_AR)(Tone.o) : CXX_FLAGS	=	-w
+#$(ARD_AR)(Tone.o) : CXX_FLAGS	=	-w
 
 # Sketch libraries.
 LIB_C_SRC	=	$(foreach ld,$(LIB_DIRS),$(wildcard $(ld)/*.c))
@@ -218,9 +199,14 @@ INC_ARD_SRC = -I$(ARD_SRC_DIR)
 INC_FLAGS	=   $(INC_ARD_SRC) $(INC_LIBDIR)
 VPATH	=	$(LIB_DIRS)
 
+#configure CC compile command with flags
+#TODO: Need to fill in the patter 
+CC_COMPILE = $(CC) $(C_FLAGS) $(OPT_FLAGS) $(ARD_FLAGS) $(INC_FLAGS)  $< -o $*.o
+
+# Make sure these are the combined platforms.txt and boards.txt settings
 # Definitions.
 define run-cc
-	$(CC) -c $(C_FLAGS) $(OPT_FLAGS) $(ARD_FLAGS) $(INC_FLAGS)  $< -o $*.o
+	$(CC_COMPILE)
 	@ $(AR) rc $@ $*.o
 	@ $(RM) $*.o
 endef
